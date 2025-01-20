@@ -1,0 +1,8 @@
+{
+  "enter_sum": "Enter sum",
+  "ruble": "rubles",
+  "get_the_amount": "Выдать сумму",
+  "ATM_dispensed_the_following_bills": "Банкомат выдал следующие купюры",
+  "ATM_cannot_dispense_the_requested_amount": "Банкомат не может выдать запрашиваемую сумму",
+  "ATM_balance": "Баланс банкомата"
+}
