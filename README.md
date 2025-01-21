@@ -1,16 +1,66 @@
-# atm_test
 
-A new Flutter project.
+# ATM Emulator
 
-## Getting Started
+## Description
+An ATM emulator that simulates cash dispensing functionality. The ATM contains banknotes with the following denominations: 100, 200, 500, 1000, 2000, and 5000 RUB.
 
-This project is a starting point for a Flutter application.
+## Features
+- **Supported denominations**: 100, 200, 500, 1000, 2000, and 5000 EUR.
+- **Banknote limits**: A limit on the number of each denomination (limits) is maintained and kept up to date.
+- **Initialization**: Limits can be configured in the code during application initialization.
+- **Cash dispensing algorithm**:
+  - Starts with the largest available denomination.
+  - If the requested amount cannot be dispensed (due to insufficient funds or incompatible denominations), an error is returned.
+- **Dynamic limit updates**: After each successful transaction, the banknote limits are updated to reflect the current state of the ATM.
 
-A few resources to get you started if this is your first Flutter project:
+## How It Works
+1. **Initialization**: Set the limits for each banknote during application startup. Example:
+   ```dart
+    injector<LimitsRepository>().limits = [2, 1, 3, 3, 4, 2];
+   ```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+2. **Requesting Cash**:
+   - Enter the desired amount to withdraw.
+   - The application checks if the amount can be dispensed based on the current limits.
+   - If the amount can be dispensed:
+     - Returns a list of banknotes and their quantities.
+   - If the amount cannot be dispensed:
+     - Returns an error message.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+3. **Updating Limits**: After each transaction, the limits are dynamically updated.
+
+## Example
+### Initial Data
+- Limits:
+  - 5000 EUR: 10 pcs.
+  - 2000 EUR: 20 pcs.
+  - 1000 EUR: 50 pcs.
+  - 500 EUR: 100 pcs.
+  - 200 EUR: 200 pcs.
+  - 100 EUR: 500 pcs.
+- Requested Amount: 7800 EUR.
+
+### Result
+- Dispensed banknotes:
+  - 5000 EUR: 1 pc.
+  - 2000 EUR: 1 pc.
+  - 500 EUR: 1 pc.
+  - 200 EUR: 1 pc.
+  - 100 EUR: 1 pc.
+
+### Error Case
+- Requested Amount: 12345 EUR.
+- Result: "Error. Unable to dispense the requested amount."
+
+## Technical Details
+- **State Management**: `bloc`
+- **Dependency Injection**: `getIt`
+- **Localization**: `l10n`
+- **Algorithm**: Implements a greedy approach, starting with the largest denomination first.
+
+## Requirements
+- Flutter SDK
+- Dart version 2.12 or higher
+
+
+
