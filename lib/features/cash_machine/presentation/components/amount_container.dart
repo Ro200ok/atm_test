@@ -4,15 +4,16 @@ import 'package:atm_test/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class AmountContainer extends StatelessWidget {
-  const AmountContainer({super.key, required this.callback, required this.controller});
+  const AmountContainer({super.key, required this.callback, required this.controller, required this.height});
   final VoidCallback callback;
   final TextEditingController controller;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
     final theme = AtmAppTheme.of(context);
     return Container(
-      height: 250,
+      height: height,
       width: double.infinity,
       padding: const EdgeInsets.only(top: 20),
       color: Colors.transparent,

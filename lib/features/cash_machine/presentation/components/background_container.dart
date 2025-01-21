@@ -12,6 +12,7 @@ class BackgroundContainer extends StatelessWidget {
     return Transform.rotate(
       angle: angle * math.pi / 180,
       child: SizedBox(
+        width: double.infinity,
         height: height,
         child: const Stack(
           children: [
