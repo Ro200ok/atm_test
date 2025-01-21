@@ -42,7 +42,6 @@ class _AtmPageState extends State<AtmPage> {
   Widget build(BuildContext context) {
     final theme = AtmAppTheme.of(context);
     final screenHeight = MediaQuery.sizeOf(context).height;
-    log(MediaQuery.sizeOf(context).height.toString());
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: const AtmAppBar(),
