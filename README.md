@@ -5,7 +5,7 @@
 An ATM emulator that simulates cash dispensing functionality. The ATM contains banknotes with the following denominations: 100, 200, 500, 1000, 2000, and 5000 RUB.
 
 ## Features
-- **Supported denominations**: 100, 200, 500, 1000, 2000, and 5000 EUR.
+- **Supported denominations**: 100, 200, 500, 1000, 2000, and 5000 RUB.
 - **Banknote limits**: A limit on the number of each denomination (limits) is maintained and kept up to date.
 - **Initialization**: Limits can be configured in the code during application initialization.
 - **Cash dispensing algorithm**:
@@ -34,24 +34,24 @@ An ATM emulator that simulates cash dispensing functionality. The ATM contains b
 ## Example
 ### Initial Data
 - Limits:
-  - 5000 EUR: 10 pcs.
-  - 2000 EUR: 20 pcs.
-  - 1000 EUR: 50 pcs.
-  - 500 EUR: 100 pcs.
-  - 200 EUR: 200 pcs.
-  - 100 EUR: 500 pcs.
-- Requested Amount: 7800 EUR.
+  - 5000 RUB: 10 pcs.
+  - 2000 RUB: 20 pcs.
+  - 1000 RUB: 50 pcs.
+  - 500 RUB: 100 pcs.
+  - 200 RUB: 200 pcs.
+  - 100 RUB: 500 pcs.
+- Requested Amount: 7800 RUB.
 
 ### Result
 - Dispensed banknotes:
-  - 5000 EUR: 1 pc.
-  - 2000 EUR: 1 pc.
-  - 500 EUR: 1 pc.
-  - 200 EUR: 1 pc.
-  - 100 EUR: 1 pc.
+  - 5000 RUB: 1 pc.
+  - 2000 RUB: 1 pc.
+  - 500 RUB: 1 pc.
+  - 200 RUB: 1 pc.
+  - 100 RUB: 1 pc.
 
 ### Error Case
-- Requested Amount: 12345 EUR.
+- Requested Amount: 12345 RUB.
 - Result: "Error. Unable to dispense the requested amount."
 
 ## Technical Details
