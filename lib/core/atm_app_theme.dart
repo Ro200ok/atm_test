@@ -1,11 +1,11 @@
-import 'package:atm_test/core/atm_app_colors.dart';
+import 'package:atm_test/core/theme_colors_extension.dart';
 import 'package:flutter/material.dart';
 // ignore_for_file: must_be_immutable
 
 class AtmAppTheme extends InheritedWidget {
-  AtmAppThemeData data;
+  final AtmAppThemeData data;
 
-  AtmAppTheme({required super.child, super.key}) : data = AtmAppThemeData.light();
+  const AtmAppTheme({required this.data, required super.child, super.key});
 
   static AtmAppThemeData of(BuildContext context) {
     final theme = context.findAncestorWidgetOfExactType<AtmAppTheme>();
@@ -20,21 +20,23 @@ class AtmAppTheme extends InheritedWidget {
 }
 
 class AtmAppThemeData {
-  late final ElevatedButtonStyle elevatedButtonStyle;
-  late final TextTypografy textTypografy;
+  final ElevatedButtonStyle elevatedButtonStyle;
+  final TextTypography textTypography;
 
-  AtmAppThemeData.light() {
-    elevatedButtonStyle = ElevatedButtonStyle(
-      primary: ElevatedButton.styleFrom(
-        foregroundColor: AtmAppColors.defaultWhite,
-        backgroundColor: AtmAppColors.buttonColor,
-        textStyle: const TextStyle(fontFamily: 'Sf Pro', fontSize: 16, fontWeight: FontWeight.w500),
-      ),
-    );
-
-    textTypografy = const TextTypografy(
-        primaryTextColor: AtmAppColors.defaultWhite, secondaryTextColor: AtmAppColors.denominationsTextColor);
-  }
+  AtmAppThemeData.light(ThemeColorsExtension colors)
+      : elevatedButtonStyle = ElevatedButtonStyle(
+          primary: ElevatedButton.styleFrom(
+            foregroundColor: colors.defaultWhite,
+            backgroundColor: colors.buttonColor,
+            textStyle: const TextStyle(fontFamily: 'Sf Pro', fontSize: 16, fontWeight: FontWeight.w500),
+          ),
+        ),
+        textTypography = TextTypography(
+          primaryTextColor: colors.defaultWhite,
+          secondaryTextColor: colors.denominationsTextColor,
+          failureColor: colors.buttonColor,
+          body1Color: colors.denominationsTextColor,
+        );
 }
 
 class ElevatedButtonStyle {
@@ -42,13 +44,17 @@ class ElevatedButtonStyle {
   const ElevatedButtonStyle({required this.primary});
 }
 
-class TextTypografy {
+class TextTypography {
   final Color primaryTextColor;
   final Color secondaryTextColor;
+  final Color failureColor;
+  final Color body1Color;
 
-  const TextTypografy({
+  const TextTypography({
     required this.primaryTextColor,
     required this.secondaryTextColor,
+    required this.failureColor,
+    required this.body1Color,
   });
 
   TextStyle display1({Color? color, FontWeight weight = FontWeight.w500}) => TextStyle(
@@ -88,7 +94,7 @@ class TextTypografy {
       );
 
   TextStyle failureText({Color? color, FontWeight weight = FontWeight.w400}) => TextStyle(
-        color: AtmAppColors.buttonColor,
+        color: color ?? failureColor,
         fontFamily: 'Sf Pro',
         fontFamilyFallback: const ['Roboto'],
         fontWeight: weight,
@@ -97,7 +103,7 @@ class TextTypografy {
       );
 
   TextStyle body1({Color? color, FontWeight weight = FontWeight.w500}) => TextStyle(
-        color: AtmAppColors.denominationsTextColor,
+        color: color ?? body1Color,
         fontFamily: 'Sf Pro',
         fontFamilyFallback: const ['Roboto'],
         fontWeight: weight,

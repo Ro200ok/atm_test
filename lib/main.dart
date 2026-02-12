@@ -1,11 +1,19 @@
-import 'package:atm_test/runner_io.dart';
-
 import 'dart:async';
-import 'dart:developer' as dev;
+
+import 'package:atm_test/runner_io.dart';
+import 'package:atm_test/shared/logging/app_logger.dart';
 
 void main() {
+  registerCoreDependencies();
+
   runZonedGuarded(
     $initializeApp,
-    (e, st) => dev.log('Error occured in main zone', error: e, stackTrace: st),
+    (Object error, StackTrace stackTrace) {
+      injector<AppLoggerItf>().error(
+        'Unhandled zone error',
+        error: error,
+        stackTrace: stackTrace,
+      );
+    },
   );
 }

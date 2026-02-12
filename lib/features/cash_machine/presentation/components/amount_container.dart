@@ -21,12 +21,12 @@ class AmountContainer extends StatelessWidget {
         children: [
           Text(
             S.of(context).enter_sum,
-            style: theme.textTypografy.title1(),
+            style: theme.textTypography.title1(),
           ),
           SizedBox(
             width: 200,
             child: TextField(
-              style: theme.textTypografy.display1(),
+              style: theme.textTypography.display1(),
               controller: controller,
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
               inputFormatters: [
@@ -35,7 +35,7 @@ class AmountContainer extends StatelessWidget {
               decoration: InputDecoration(
                 suffix: Text(
                   S.of(context).ruble,
-                  style: theme.textTypografy.display1(),
+                  style: theme.textTypography.display1(),
                 ),
               ),
             ),
@@ -46,7 +46,7 @@ class AmountContainer extends StatelessWidget {
             style: theme.elevatedButtonStyle.primary,
             child: Text(
               S.of(context).get_the_amount,
-              style: theme.textTypografy.title2(),
+              style: theme.textTypography.title2(),
             ),
           ),
           const SizedBox(height: 5),

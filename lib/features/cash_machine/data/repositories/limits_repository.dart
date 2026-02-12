@@ -2,7 +2,10 @@ import 'package:atm_test/features/cash_machine/data/model/cash_result_dto.dart';
 
 class LimitsRepository {
   List<int> _limits = [];
-  LimitsRepository();
+
+  LimitsRepository([List<int>? initialLimits]) {
+    if (initialLimits != null) _limits = List<int>.from(initialLimits);
+  }
 
   static const List<int> _denominations = [100, 200, 500, 1000, 2000, 5000];
 
@@ -12,5 +15,5 @@ class LimitsRepository {
 
   set limits(List<int> newLimits) => _limits = List.from(newLimits);
 
-  CashResultDto get cashResultDto => CashResultDto(limits: _limits, denominations: _denominations, diffValues: []);
+  CashResultDto get cashResultDto => CashResultDto(limits: _limits, denominations: _denominations, taken: []);
 }

@@ -1,11 +1,12 @@
 import 'package:atm_test/core/atm_app_theme.dart';
+import 'package:atm_test/core/constants/layout_constants.dart';
 import 'package:flutter/material.dart';
 
 class GridLayout extends StatelessWidget {
-  const GridLayout({super.key, required this.amounts, required this.denominations, required this.titie, this.height});
+  const GridLayout({super.key, required this.amounts, required this.denominations, required this.title, this.height});
   final List<int> amounts;
   final List<int> denominations;
-  final String titie;
+  final String title;
   final double? height;
 
   @override
@@ -13,29 +14,33 @@ class GridLayout extends StatelessWidget {
     final theme = AtmAppTheme.of(context);
     return Container(
       height: height,
-      padding: const EdgeInsets.all(15),
+      padding: const EdgeInsets.all(LayoutConstants.gridPadding),
       color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            titie,
+            title,
             style: const TextStyle(color: Colors.grey),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: LayoutConstants.gridTitleBottomSpacing),
           GridView.builder(
             shrinkWrap: true,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, childAspectRatio: 8, mainAxisSpacing: 0, crossAxisSpacing: 10, mainAxisExtent: 20),
+                crossAxisCount: LayoutConstants.gridCrossAxisCount,
+                childAspectRatio: LayoutConstants.gridChildAspectRatio,
+                mainAxisSpacing: 0,
+                crossAxisSpacing: LayoutConstants.gridCrossAxisSpacing,
+                mainAxisExtent: LayoutConstants.gridMainAxisExtent),
             itemBuilder: (_, index) => Row(
               children: [
                 Text(
                   '${amounts[index]} X ',
-                  style: theme.textTypografy.body1(),
+                  style: theme.textTypography.body1(),
                 ),
                 Text(
                   '${denominations[index]}  рублей',
-                  style: theme.textTypografy.body1(),
+                  style: theme.textTypography.body1(),
                 )
               ],
             ),

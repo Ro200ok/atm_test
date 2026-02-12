@@ -14,9 +14,11 @@ An ATM emulator that simulates cash dispensing functionality. The ATM contains b
 - **Dynamic limit updates**: After each successful transaction, the banknote limits are updated to reflect the current state of the ATM.
 
 ## How It Works
-1. **Initialization**: Set the limits for each banknote during application startup. Example:
+1. **Initialization**: The repository is created with initial limits via constructor; no mutation from outside after registration. Default limits are defined in `AtmConfig.defaultLimits`. Example:
    ```dart
-    injector<LimitsRepository>().limits = [2, 1, 3, 3, 4, 2];
+   injector.registerLazySingleton<LimitsRepository>(
+     () => LimitsRepository(AtmConfig.defaultLimits),
+   );
    ```
 
 2. **Requesting Cash**:

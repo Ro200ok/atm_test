@@ -1,4 +1,4 @@
-import 'package:atm_test/core/atm_app_colors.dart';
+import 'package:atm_test/core/theme_colors_extension.dart';
 import 'package:flutter/material.dart';
 
 class CustomContainer extends StatelessWidget {
@@ -28,6 +28,7 @@ class CustomContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<ThemeColorsExtension>()!;
     return Opacity(
       opacity: opacity,
       child: SizedBox(
@@ -35,12 +36,12 @@ class CustomContainer extends StatelessWidget {
         width: double.infinity,
         child: CustomPaint(
           painter: WavePainter(
-              gradient: const LinearGradient(
+              gradient: LinearGradient(
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
                 colors: <Color>[
-                  AtmAppColors.mainBackroundGrL,
-                  AtmAppColors.mainBackroundGrR,
+                  colors.mainBackgroundGrL,
+                  colors.mainBackgroundGrR,
                 ],
               ),
               ax1,

@@ -1,4 +1,5 @@
 import 'package:atm_test/core/atm_app_theme.dart';
+import 'package:atm_test/core/theme_colors_extension.dart';
 import 'package:atm_test/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -20,7 +21,20 @@ class _AtmAppState extends State<AtmApp> {
 
   @override
   Widget build(BuildContext context) {
+    final lightTheme = ThemeData(
+      colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      useMaterial3: true,
+      extensions: [ThemeColorsExtension.light()],
+    );
+    final darkTheme = ThemeData(
+      colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple, brightness: Brightness.dark),
+      useMaterial3: true,
+      extensions: [ThemeColorsExtension.dark()],
+    );
+    final colors = lightTheme.extension<ThemeColorsExtension>()!;
+
     return AtmAppTheme(
+      data: AtmAppThemeData.light(colors),
       child: MaterialApp(
         localizationsDelegates: const [
           S.delegate,
@@ -30,10 +44,8 @@ class _AtmAppState extends State<AtmApp> {
         ],
         supportedLocales: const [Locale('ru')],
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
+        theme: lightTheme,
+        darkTheme: darkTheme,
         home: const AtmPage(),
       ),
     );

@@ -1,14 +1,26 @@
-import 'dart:developer';
-
 import 'package:atm_test/core/atm_app_theme.dart';
+import 'package:atm_test/core/constants/layout_constants.dart';
 import 'package:atm_test/features/cash_machine/bloc/cash_machine_bloc.dart';
 import 'package:atm_test/features/cash_machine/presentation/components/amount_container.dart';
 import 'package:atm_test/features/cash_machine/presentation/components/atm_appbar.dart';
 import 'package:atm_test/features/cash_machine/presentation/components/background_container.dart';
+import 'package:atm_test/features/cash_machine/presentation/components/cash_machine_state_section.dart';
 import 'package:atm_test/features/cash_machine/presentation/components/grid_component.dart';
+import 'package:atm_test/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:atm_test/generated/l10n.dart';
+
+class _SectionDivider extends StatelessWidget {
+  const _SectionDivider();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: LayoutConstants.atmPageDividerHeight,
+      color: Colors.grey.withValues(alpha: LayoutConstants.atmPageDividerAlpha),
+    );
+  }
+}
 
 class AtmPage extends StatefulWidget {
   const AtmPage({super.key});
@@ -19,10 +31,11 @@ class AtmPage extends StatefulWidget {
 
 class _AtmPageState extends State<AtmPage> {
   late TextEditingController _controller;
+
   @override
   void initState() {
-    _controller = TextEditingController();
     super.initState();
+    _controller = TextEditingController();
   }
 
   @override
@@ -42,6 +55,8 @@ class _AtmPageState extends State<AtmPage> {
   Widget build(BuildContext context) {
     final theme = AtmAppTheme.of(context);
     final screenHeight = MediaQuery.sizeOf(context).height;
+    final gridHeight = screenHeight / LayoutConstants.atmGridHeightFactor;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: const AtmAppBar(),
@@ -49,99 +64,66 @@ class _AtmPageState extends State<AtmPage> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
-            spacing: 5,
+            spacing: LayoutConstants.atmPageSectionSpacing,
             children: [
               Stack(
                 children: [
                   BackgroundContainer(
                     angle: 0,
-                    height: screenHeight / 5.86,
+                    height: screenHeight / LayoutConstants.atmHeaderHeightFactor,
                   ),
-                  // ... other CustomContainers
                   AmountContainer(
-                    height: screenHeight / 3.2,
+                    height: screenHeight / LayoutConstants.atmAmountSectionHeightFactor,
                     callback: _tryToGetCache,
                     controller: _controller,
                   )
                 ],
               ),
-              Container(
-                height: 10,
-                color: Colors.grey.withValues(alpha: 200),
-              ),
+              const _SectionDivider(),
               BlocBuilder<CashMachineBloc, CashMachineState>(
-                builder: (context, state) => state.when(
-                  initial: (result) => GridLayout(
-                      height: screenHeight / 5.47,
-                      amounts: result.diffValues,
-                      denominations: result.denominations,
-                      titie: S.of(context).ATM_dispensed_the_following_bills),
-                  loading: () => Container(
-                    width: double.infinity,
-                    height: screenHeight / 5.47,
-                    color: Colors.white,
-                    child: const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
-                  success: (result) => GridLayout(
-                    titie: S.of(context).ATM_dispensed_the_following_bills,
-                    amounts: result.diffValues,
+                builder: (context, state) => CashMachineStateSection(
+                  state: state,
+                  sectionHeight: gridHeight,
+                  contentBuilder: (result) => GridLayout(
+                    height: gridHeight,
+                    amounts: result.taken,
                     denominations: result.denominations,
+                    title: S.of(context).ATM_dispensed_the_following_bills,
                   ),
-                  failure: (_) => Container(
+                  failureBuilder: (_) => Container(
                     width: double.infinity,
-                    height: screenHeight / 5.47,
+                    height: gridHeight,
                     color: Colors.white,
                     child: Center(
                       child: Text(
                         textAlign: TextAlign.center,
                         S.of(context).ATM_cannot_dispense_the_requested_amount,
-                        style: theme.textTypografy.failureText(),
+                        style: theme.textTypography.failureText(),
                       ),
                     ),
                   ),
                 ),
               ),
-              Container(
-                height: 10,
-                color: Colors.grey.withValues(alpha: 200),
-              ),
+              const _SectionDivider(),
               BlocBuilder<CashMachineBloc, CashMachineState>(
-                builder: (context, state) => state.when(
-                  initial: (result) => GridLayout(
-                      height: screenHeight / 5.47,
-                      amounts: result.limits,
-                      denominations: result.denominations,
-                      titie: S.of(context).ATM_balance),
-                  loading: () => Container(
-                      width: double.infinity,
-                      height: screenHeight / 5.47,
-                      color: Colors.white,
-                      child: const Center(child: CircularProgressIndicator())),
-                  success: (result) => GridLayout(
-                    titie: S.of(context).ATM_balance,
-                    amounts: result.limits,
-                    denominations: result.denominations,
-                  ),
-                  failure: (result) => GridLayout(
-                    titie: S.of(context).ATM_balance,
+                builder: (context, state) => CashMachineStateSection(
+                  state: state,
+                  sectionHeight: gridHeight,
+                  contentBuilder: (result) => GridLayout(
+                    title: S.of(context).ATM_balance,
                     amounts: result.limits,
                     denominations: result.denominations,
                   ),
                 ),
               ),
-              Container(
-                height: 10,
-                color: Colors.grey.withValues(alpha: 200),
-              ),
+              const _SectionDivider(),
             ],
           ),
         ),
       ),
       bottomNavigationBar: BackgroundContainer(
         angle: 180,
-        height: screenHeight / 10.26,
+        height: screenHeight / LayoutConstants.atmBottomBarHeightFactor,
       ),
     );
   }

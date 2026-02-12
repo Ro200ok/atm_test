@@ -1,14 +1,15 @@
 import 'package:atm_test/core/atm_app_assets.dart';
-import 'package:atm_test/core/atm_app_colors.dart';
+import 'package:atm_test/core/theme_colors_extension.dart';
 import 'package:flutter/material.dart';
 
 class AtmAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double height;
 
-  const AtmAppBar({Key? key, this.height = 80}) : super(key: key);
+  const AtmAppBar({super.key, this.height = 80});
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<ThemeColorsExtension>()!;
     return PreferredSize(
       preferredSize: Size.fromHeight(height),
       child: AppBar(
@@ -29,13 +30,13 @@ class AtmAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
         flexibleSpace: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
               colors: <Color>[
-                AtmAppColors.mainBackroundGrL,
-                AtmAppColors.mainBackroundGrR,
+                colors.mainBackgroundGrL,
+                colors.mainBackgroundGrR,
               ],
             ),
           ),

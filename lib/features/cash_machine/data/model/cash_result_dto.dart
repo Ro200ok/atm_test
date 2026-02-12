@@ -5,12 +5,12 @@ import 'package:collection/collection.dart';
 class CashResultDto {
   final List<int> limits;
   final List<int> denominations;
-  final List<int> diffValues;
+  final List<int> taken;
 
   CashResultDto({
     required this.limits,
     required this.denominations,
-    required this.diffValues,
+    required this.taken,
   });
 
   @override
@@ -21,7 +21,7 @@ class CashResultDto {
     const listEquality = DeepCollectionEquality();
     return listEquality.equals(limits, other.limits) &&
         listEquality.equals(denominations, other.denominations) &&
-        listEquality.equals(diffValues, other.diffValues);
+        listEquality.equals(taken, other.taken);
   }
 
   @override
@@ -30,7 +30,7 @@ class CashResultDto {
     return Object.hash(
       listEquality.hash(limits),
       listEquality.hash(denominations),
-      listEquality.hash(diffValues),
+      listEquality.hash(taken),
     );
   }
 }
