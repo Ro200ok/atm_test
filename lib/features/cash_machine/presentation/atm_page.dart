@@ -81,40 +81,46 @@ class _AtmPageState extends State<AtmPage> {
               ),
               const _SectionDivider(),
               BlocBuilder<CashMachineBloc, CashMachineState>(
-                builder: (context, state) => CashMachineStateSection(
-                  state: state,
-                  sectionHeight: gridHeight,
-                  contentBuilder: (result) => GridLayout(
-                    height: gridHeight,
-                    amounts: result.taken,
-                    denominations: result.denominations,
-                    title: S.of(context).ATM_dispensed_the_following_bills,
-                  ),
-                  failureBuilder: (_) => Container(
-                    width: double.infinity,
-                    height: gridHeight,
-                    color: Colors.white,
-                    child: Center(
-                      child: Text(
-                        textAlign: TextAlign.center,
-                        S.of(context).ATM_cannot_dispense_the_requested_amount,
-                        style: theme.textTypography.failureText(),
+                builder: (context, state) {
+                  return Column(
+                    spacing: LayoutConstants.atmPageSectionSpacing,
+                    children: [
+                      CashMachineStateSection(
+                        state: state,
+                        sectionHeight: gridHeight,
+                        contentBuilder: (result) => GridLayout(
+                          height: gridHeight,
+                          amounts: result.taken,
+                          denominations: result.denominations,
+                          title: S.of(context).ATM_dispensed_the_following_bills,
+                        ),
+                        failureBuilder: (_) => Container(
+                          width: double.infinity,
+                          height: gridHeight,
+                          color: Colors.white,
+                          child: Center(
+                            child: Text(
+                              textAlign: TextAlign.center,
+                              S.of(context).ATM_cannot_dispense_the_requested_amount,
+                              style: theme.textTypography.failureText(),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-              ),
-              const _SectionDivider(),
-              BlocBuilder<CashMachineBloc, CashMachineState>(
-                builder: (context, state) => CashMachineStateSection(
-                  state: state,
-                  sectionHeight: gridHeight,
-                  contentBuilder: (result) => GridLayout(
-                    title: S.of(context).ATM_balance,
-                    amounts: result.limits,
-                    denominations: result.denominations,
-                  ),
-                ),
+                      const _SectionDivider(),
+                      CashMachineStateSection(
+                        state: state,
+                        sectionHeight: gridHeight,
+                        contentBuilder: (result) => GridLayout(
+                          height: gridHeight,
+                          title: S.of(context).ATM_balance,
+                          amounts: result.limits,
+                          denominations: result.denominations,
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
               const _SectionDivider(),
             ],
