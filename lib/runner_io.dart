@@ -3,6 +3,8 @@ import 'package:atm_test/features/cash_machine/bloc/cash_machine_bloc.dart';
 import 'package:atm_test/di.dart';
 import 'package:atm_test/features/cash_machine/data/config/atm_config.dart';
 import 'package:atm_test/features/cash_machine/data/repositories/limits_repository.dart';
+import 'package:atm_test/features/cash_machine/domain/repositories/limits_repository_port.dart';
+import 'package:atm_test/features/cash_machine/domain/withdraw_cash_use_case.dart';
 import 'package:atm_test/shared/logging/app_logger.dart';
 import 'package:atm_test/shared/logging/app_logger_impl.dart';
 import 'package:atm_test/shared/logging/monitoring_service.dart';
@@ -32,18 +34,22 @@ Future<void> $initializeApp() async {
 
   Bloc.transformer = concurrency.sequential();
 
-  injector.registerLazySingleton<LimitsRepository>(
+  injector.registerLazySingleton<LimitsRepositoryPort>(
     () => LimitsRepository(AtmConfig.defaultLimits),
+  );
+
+  injector.registerFactory<WithdrawCashUseCase>(
+    () => WithdrawCashUseCase(injector<LimitsRepositoryPort>()),
   );
 
   injector.registerFactory<CashMachineBloc>(
     () => CashMachineBloc(
+      limitsRepository: injector<LimitsRepositoryPort>(),
+      withdrawCashUseCase: injector<WithdrawCashUseCase>(),
       logger: injector<AppLoggerItf>(),
-      limitsRepository: injector<LimitsRepository>(),
     ),
   );
 
-  // Запуск приложения
   runApp(
     const Di(child: AtmApp()),
   );

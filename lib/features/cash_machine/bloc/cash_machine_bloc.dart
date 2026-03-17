@@ -1,8 +1,8 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'package:atm_test/features/cash_machine/data/model/cash_result_dto.dart';
-import 'package:atm_test/features/cash_machine/data/repositories/limits_repository.dart';
-import 'package:atm_test/features/cash_machine/domain/withdraw_calculator.dart';
+import 'package:atm_test/features/cash_machine/domain/repositories/limits_repository_port.dart';
+import 'package:atm_test/features/cash_machine/domain/withdraw_cash_use_case.dart';
 import 'package:atm_test/shared/logging/app_logger.dart';
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -12,44 +12,42 @@ part 'cash_machine_state.dart';
 part 'cash_machine_bloc.freezed.dart';
 
 class CashMachineBloc extends Bloc<CashMachineEvent, CashMachineState> {
-  final LimitsRepository _limitsRepository;
+  CashMachineBloc({
+    required LimitsRepositoryPort limitsRepository,
+    required WithdrawCashUseCase withdrawCashUseCase,
+    required AppLoggerItf logger,
+  })  : _withdrawCashUseCase = withdrawCashUseCase,
+        _logger = logger,
+        super(CashMachineState.initial(_initialCashResult(limitsRepository))) {
+    on<_CashMachineEventTryToGetCache>(_tryToGetCache);
+  }
+
+  final WithdrawCashUseCase _withdrawCashUseCase;
   final AppLoggerItf _logger;
 
-  CashMachineBloc({required LimitsRepository limitsRepository, required AppLoggerItf logger})
-      : _limitsRepository = limitsRepository,
-        _logger = logger,
-        super(CashMachineState.initial(limitsRepository.cashResultDto)) {
-    on<_CashMachineEventTryToGetCache>(_tryToGetCache);
+  static CashResultDto _initialCashResult(LimitsRepositoryPort repo) {
+    return CashResultDto(
+      limits: repo.limits,
+      denominations: repo.denominations,
+      taken: [],
+    );
   }
 
   void _tryToGetCache(_CashMachineEventTryToGetCache event, Emitter<CashMachineState> emit) {
     emit(const CashMachineState.loading());
 
     try {
-      final int amount = event.amount;
-      final List<int> denominations = _limitsRepository.denominations;
-      final result = WithdrawCalculator.withdraw(
-        amount,
-        _limitsRepository.limits,
-        denominations,
-      );
-
-      if (!result.ok) {
-        final cashResult = CashResultDto(
-          limits: result.remainingLimits,
-          denominations: denominations,
-          taken: result.taken,
-        );
-        emit(CashMachineState.failure(cashResult));
-        return;
-      }
+      final result = _withdrawCashUseCase.execute(event.amount);
       final cashResult = CashResultDto(
         limits: result.remainingLimits,
-        denominations: denominations,
+        denominations: result.denominations,
         taken: result.taken,
       );
-      _limitsRepository.limits = result.remainingLimits;
-      emit(CashMachineState.success(cashResult));
+      if (result.ok) {
+        emit(CashMachineState.success(cashResult));
+      } else {
+        emit(CashMachineState.failure(cashResult));
+      }
     } on Object catch (e, st) {
       _logger.error('CashMachineBloc.tryToGetCache failed', error: e, stackTrace: st);
       emit(state);

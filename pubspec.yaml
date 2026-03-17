@@ -10,6 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  collection: ^1.18.0
   flutter_bloc: ^9.0.0
   bloc_concurrency: ^0.3.0
   get_it: ^8.0.3

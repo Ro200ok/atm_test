@@ -1,5 +1,6 @@
 import 'package:atm_test/features/cash_machine/bloc/cash_machine_bloc.dart';
 import 'package:atm_test/features/cash_machine/data/repositories/limits_repository.dart';
+import 'package:atm_test/features/cash_machine/domain/withdraw_cash_use_case.dart';
 import 'package:atm_test/shared/logging/app_logger.dart';
 import 'package:atm_test/shared/logging/app_logger_impl.dart';
 import 'package:atm_test/shared/logging/no_op_monitoring_service.dart';
@@ -9,15 +10,18 @@ void main() {
   const denominations = [100, 200, 500, 1000, 2000, 5000];
 
   late LimitsRepository limitsRepository;
+  late WithdrawCashUseCase withdrawCashUseCase;
   late AppLoggerItf logger;
 
   setUp(() {
     limitsRepository = LimitsRepository();
+    withdrawCashUseCase = WithdrawCashUseCase(limitsRepository);
     logger = AppLoggerImpl(NoOpMonitoringService());
   });
 
   CashMachineBloc createBloc() => CashMachineBloc(
         limitsRepository: limitsRepository,
+        withdrawCashUseCase: withdrawCashUseCase,
         logger: logger,
       );
 
